@@ -145,10 +145,78 @@ function setupFormSubmit() {
         try {
             const formData = new FormData(this);
             
+            async function setupFormSubmit() {
+    const form = document.getElementById('registrationForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '提交中...';
+
+        try {
+            const formData = new FormData(this);
+            const plainData = {};
+
+            // 转换普通字段
+            formData.forEach((value, key) => {
+                if (value instanceof File) return;
+                plainData[key] = value;
+            });
+
+            // 转换文件字段为 Base64
+            const fileFields = ['icFront', 'icBack', 'passportPhoto', 'bill'];
+            for (const field of fileFields) {
+                const file = formData.get(field);
+                if (file && file.size > 0) {
+                    const base64 = await toBase64(file);
+                    plainData[field] = base64;
+                    plainData[field + '_filename'] = file.name;
+                    plainData[field + '_type'] = file.type;
+                }
+            }
+
             const response = await fetch(APP_SCRIPT_URL, {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(plainData)
             });
+
+            const result = await response.json();
+
+            if (result.success) {
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                this.reset();
+            } else {
+                throw new Error(result.message);
+            }
+
+        } catch (error) {
+            errorMsg.textContent = '❌ 提交失败：' + error.message;
+            errorMsg.style.display = 'block';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '提交注册';
+        }
+    });
+}
+
+// 把文件转成 base64
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = (err) => reject(err);
+    });
+}
+
             
             const result = await response.json();
 
