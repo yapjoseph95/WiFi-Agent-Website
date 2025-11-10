@@ -1,4 +1,4 @@
-const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxaGU7mly7vo8UJCE59ld418e-ujA6DIfWL3xuq4tKNNEUxngr1QlaBwaT4ApTCVkeDQ/exec'; // 您的 Google Apps Script Web 应用 URL
+const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOTVs6sipqe6stetdKJqV4AkKRFbkErcOnFmBRkFrDE8saR3MxDQ6ebRPXgDNe9PjJ/exec'; // 您的 Google Apps Script Web 应用 URL
 
 // Carousel 功能
 let currentSlide = 0;
