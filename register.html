@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户注册 - WiFi Agent Malaysia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="packages.html">最新配套</a></li>
+            <li><a href="register.html">立即注册</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">联系我们</a></li>
+        </ul>
+    </nav>
+
+    <section class="form-section">
+        <h2>📝 客户注册表单</h2>
+        
+        <div class="success-message" id="successMessage">
+            ✅ 提交成功！我们会尽快联系您。
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            ❌ 提交失败，请稍后再试。
+        </div>
+
+        <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbzxaGU7mly7vo8UJCE59ld418e-ujA6DIfWL3xuq4tKNNEUxngr1QlaBwaT4ApTCVkeDQ/exec" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">姓名 *</label>
+                <input type="text" id="name" name="name" required placeholder="请输入您的全名">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">联系电话 *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="例如: 012-3456789">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="example@email.com">
+            </div>
+
+            <!-- 证件类型选择 -->
+            <div class="form-group">
+                <label for="idType">证件类型 *</label>
+                <select id="idType" name="idType" required onchange="toggleIdFields()">
+                    <option value="">-- 请选择 --</option>
+                    <option value="ic">IC (马来西亚身份证)</option>
+                    <option value="passport">Passport (护照)</option>
+                </select>
+            </div>
+
+            <!-- IC 号码 -->
+            <div class="form-group" id="icNumberGroup" style="display:none;">
+                <label for="icNumber">IC 号码 *</label>
+                <input type="text" id="icNumber" name="icNumber" placeholder="例如: 123456-78-9012">
+            </div>
+
+            <!-- 护照号码 -->
+            <div class="form-group" id="passportNumberGroup" style="display:none;">
+                <label for="passportNumber">护照号码 *</label>
+                <input type="text" id="passportNumber" name="passportNumber" placeholder="请输入护照号码">
+            </div>
+
+            <div class="form-group">
+                <label for="address">安装地址 *</label>
+                <textarea id="address" name="address" rows="3" required placeholder="请输入完整地址"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="isp">选择 ISP *</label>
+                <select id="isp" name="isp" required>
+                    <option value="">-- 请选择 --</option>
+                    <option value="Unifi">Unifi</option>
+                    <option value="Maxis">Maxis</option>
+                    <option value="Time">Time</option>
+                    <option value="Astro Fibre">Astro Fibre</option>
+                    <option value="U Mobile">U Mobile</option>
+                    <option value="CelcomDigi">CelcomDigi</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="package">选择配套</label>
+                <input type="text" id="package" name="package" placeholder="例如: 100Mbps / 300Mbps">
+            </div>
+
+            <div class="form-group">
+                <label for="installDate">首选安装日期</label>
+                <input type="date" id="installDate" name="installDate">
+            </div>
+
+            <!-- IC 上传区域 -->
+            <div id="icUploadSection" class="hidden">
+                <div class="form-group">
+                    <label>上传 IC 正面 *</label>
+                    <div class="file-upload" onclick="document.getElementById('icFront').click()">
+                        <input type="file" id="icFront" name="icFront" accept="image/*,.pdf">
+                        <div class="file-label">📎 点击上传 IC 正面照片</div>
+                        <div class="file-info" id="icFrontInfo">支持 JPG, PNG, PDF (最大 10MB)</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>上传 IC 背面 *</label>
+                    <div class="file-upload" onclick="document.getElementById('icBack').click()">
+                        <input type="file" id="icBack" name="icBack" accept="image/*,.pdf">
+                        <div class="file-label">📎 点击上传 IC 背面照片</div>
+                        <div class="file-info" id="icBackInfo">支持 JPG, PNG, PDF (最大 10MB)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 护照上传区域 -->
+            <div id="passportUploadSection" class="hidden">
+                <div class="form-group">
+                    <label>上传护照照片 *</label>
+                    <div class="file-upload" onclick="document.getElementById('passportPhoto').click()">
+                        <input type="file" id="passportPhoto" name="passportPhoto" accept="image/*,.pdf">
+                        <div class="file-label">📎 点击上传护照照片</div>
+                        <div class="file-info" id="passportPhotoInfo">支持 JPG, PNG, PDF (最大 10MB)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 水电账单 -->
+            <div class="form-group">
+                <label>上传水电账单 *</label>
+                <div class="file-upload" onclick="document.getElementById('bill').click()">
+                    <input type="file" id="bill" name="bill" accept="image/*,.pdf" required>
+                    <div class="file-label">📎 点击上传水电账单</div>
+                    <div class="file-info" id="billInfo">支持 JPG, PNG, PDF (最大 10MB)</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="remarks">备注</label>
+                <textarea id="remarks" name="remarks" rows="3" placeholder="其他需要说明的信息"></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn">提交注册</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 WiFi Agent Malaysia. All Rights Reserved.</p>
+        <p style="margin-top: 1rem; color: #95a5a6;">专业、快速、可靠的宽带注册服务</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
